@@ -1,27 +1,26 @@
 const miForm = document.querySelector('form');
 
-const url = (window.location.hostname.includes('localhost'))
-    ? 'http://localhost:8080/api/auth/'
-    : 'https://curso-node-chat-2021.herokuapp.com/api/auth/';
+const url = (window.location.hostname.includes('localhost')) ?
+    'http://localhost:8080/api/auth/' :
+    'https://curso-node-chat-2021.herokuapp.com/api/auth/';
 
 
 miForm.addEventListener('submit', ev => {
     console.log(ev);
     ev.preventDefault();
 
-    const formData = {};
+    let formData = {};
 
-    for (let el of miForm.elements) {
-        if (el.name.length > 0) {
-            formData[el.name] = el.value;
-        }
-    }
+    const correo = document.getElementById('correo').value;
+    const password = document.getElementById('password').value;
+
+    formData = { correo: correo, password: password };
 
     fetch(url + 'login', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: { 'content-Type': 'application/json' }
-    })
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: { 'content-Type': 'application/json' }
+        })
         .then(resp => resp.json())
         .then(({ msg, token }) => {
             if (msg) {
@@ -51,10 +50,10 @@ function onSignIn(googleUser) {
     const data = { id_token };
 
     fetch(url + 'google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
         .then(resp => resp.json())
         .then(({ token }) => {
 
@@ -68,7 +67,7 @@ function onSignIn(googleUser) {
 
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
+    auth2.signOut().then(function() {
         console.log('User signed out.');
     });
 }
